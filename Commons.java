@@ -12,4 +12,8 @@ public class Commons {
         }
         return lines;
     }
+    public static String readStdIn() {
+        return String.join("\n", readStdInLines());
+    }
+
 }
