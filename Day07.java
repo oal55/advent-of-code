@@ -10,17 +10,6 @@ class Day07 {
         System.out.println(partTwo(hands));
     }
 
-    private static int compareCardsWithPriority(String p, String q, String allCardsOrdered) {
-        for (int i = 0; i < p.length(); ++i) {
-            if (p.charAt(i) != q.charAt(i)) {
-                int indexP = allCardsOrdered.indexOf(p.charAt(i));
-                int indexQ = allCardsOrdered.indexOf(q.charAt(i));
-                return indexP < indexQ ? 1 : -1;
-            }
-        }
-        return 0;
-    }
-
     private static int partOne(List<Hand> hands) {
         List<Hand> sortedHands = hands.stream()
                 .sorted((p, q) -> {
@@ -35,17 +24,28 @@ class Day07 {
     }
 
     private static int partTwo(List<Hand> hands) {
-        final String replacements = "AKQT98765432";
+        final String allCardsOrdered = "AKQT98765432J";
         List<Hand> sortedHands = hands.stream()
                 .sorted((p, q) -> {
-                    HandType typeP = HandType.determiHandTypeWithReplacement(p.cards, replacements);
-                    HandType typeQ = HandType.determiHandTypeWithReplacement(q.cards, replacements);
+                    HandType typeP = HandType.determiHandTypeWithReplacement(p.cards, allCardsOrdered);
+                    HandType typeQ = HandType.determiHandTypeWithReplacement(q.cards, allCardsOrdered);
                     return typeP.equals(typeQ)
-                        ? compareCardsWithPriority(p.cards(), q.cards(), "AKQT98765432J")
+                        ? compareCardsWithPriority(p.cards(), q.cards(), allCardsOrdered)
                         : typeP.compareTo(typeQ);
                 })
                 .toList();
         return sumHands(sortedHands);
+    }
+
+    private static int compareCardsWithPriority(String p, String q, String allCardsOrdered) {
+        for (int i = 0; i < p.length(); ++i) {
+            if (p.charAt(i) != q.charAt(i)) {
+                int indexP = allCardsOrdered.indexOf(p.charAt(i));
+                int indexQ = allCardsOrdered.indexOf(q.charAt(i));
+                return indexP < indexQ ? 1 : -1;
+            }
+        }
+        return 0;
     }
 
     private static int sumHands(List<Hand> sortedHands) {
