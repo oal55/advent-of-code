@@ -7,7 +7,8 @@ import java.util.List;
 import java.util.stream.Stream;
 
 public class Main {
-    record DayAndTitle(String title, Day day) {
+
+    public record DayAndTitle(String title, Day day) {
         @Override
         public String toString() {
             List<String> tabbedSolution =
@@ -24,7 +25,7 @@ public class Main {
         days().forEach(System.out::println);
     }
 
-    private static List<DayAndTitle> days() {
+    static List<DayAndTitle> days() {
         return List.of(
                 new DayAndTitle("Day 1: Trebuchet?!", new Day01()),
                 new DayAndTitle("Day 2: Cube Conundrum", new Day02()),

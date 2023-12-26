@@ -17,6 +17,7 @@ repositories {
 
 dependencies {
     testImplementation(libs.junit.jupiter)
+    testImplementation("org.assertj:assertj-core:3.11.1")
     testRuntimeOnly("org.junit.platform:junit-platform-launcher")
     implementation(libs.guava)
 }
@@ -41,11 +42,18 @@ spotless {
 pmd {
     toolVersion = "6.55.0"
     sourceSets = listOf(pmd.sourceSets.find { it.name == SourceSet.MAIN_SOURCE_SET_NAME })
-    ruleSetFiles = files("./.myJankConfigFiles/pmd-disable-some-rules.xml")
+    ruleSetFiles = files("${rootDir}/.myJankConfigFiles/pmd-disable-some-rules.xml")
 }
-
 
 tasks.named<Test>("test") { useJUnitPlatform() }
-tasks.compileJava {
-    dependsOn(tasks.spotlessApply)
-}
+
+gradle.taskGraph.whenReady(closureOf<TaskExecutionGraph> {
+    println("Found task graph: $this")
+    println("Found " + allTasks.size + " tasks.")
+    allTasks.forEach { task ->
+        println(task)
+        task.dependsOn.forEach { dep ->
+            println("  - $dep")
+        }
+    }
+})

@@ -8,10 +8,12 @@
     </description>
 
     <rule ref="category/java/bestpractices.xml">
-        <exclude name="SystemPrintln"/>
+        <exclude name="UseVarargs"/>
+        <exclude name="AvoidReassigningParameters"/>
+        <exclude name="OneDeclarationPerLine"/>
     </rule>
 
     <rule ref="category/java/errorprone.xml">
-        <exclude name="AvoidFieldNameMatchingMethodName"/>
+        <exclude name="AvoidLiteralsInIfCondition"/>
     </rule>
 </ruleset>
