@@ -2,38 +2,33 @@ package aoc;
 
 import aoc.commons.Input;
 import aoc.commons.Solutions;
-import java.util.Arrays;
+import aoc.commons.Utils;
+import com.google.common.collect.Sets;
 import java.util.List;
 import java.util.Set;
-import java.util.regex.Matcher;
+import java.util.regex.MatchResult;
 import java.util.regex.Pattern;
-import java.util.stream.Collectors;
 
 public class Day04 implements Day {
 
     @Override
     public Solutions solve() {
-        List<String> lines = Input.readLines(this.getClass().getSimpleName());
-        return new Solutions(String.valueOf(part1(lines)), String.valueOf(part2(lines)));
+        List<Card> cards = Input.readLines(this.getClass().getSimpleName()).stream()
+                .map(Card::fromLine)
+                .toList();
+        return new Solutions(String.valueOf(part1(cards)), String.valueOf(part2(cards)));
     }
 
-    private static int part1(List<String> lines) {
-        return lines.stream()
-                .map(Card::fromLine)
-                .map(card -> card.winningNumbers.stream()
-                        .filter(card.ourNumbers::contains)
-                        .count()) // intersection size
+    private static int part1(List<Card> cards) {
+        return cards.stream()
+                .map(Card::numberOfMatches)
                 .mapToInt(intersectionSize -> 1 << (intersectionSize - 1))
                 .sum();
     }
 
-    private static int part2(List<String> lines) {
-        List<Integer> numMatchesForCards = lines.stream()
-                .map(Card::fromLine)
-                .map(card -> (int) card.winningNumbers.stream()
-                        .filter(card.ourNumbers::contains)
-                        .count()) // intersection size
-                .toList();
+    private static int part2(List<Card> cards) {
+        List<Integer> numMatchesForCards =
+                cards.stream().map(Card::numberOfMatches).toList();
 
         int[] diffs = new int[1000]; // sozzles D:
         int numCopies = 1, res = 0;
@@ -47,26 +42,22 @@ public class Day04 implements Day {
         return res;
     }
 
-    record Card(int id, Set<Integer> winningNumbers, Set<Integer> ourNumbers) {
-        private static final Pattern CARD_PATTERN =
-                Pattern.compile("Card\\s+(?<cardId>\\d+):(?<winningNums>.*)\\|(?<ourNums>.*)");
+    record Card(int id, Set<Long> winningNumbers, Set<Long> ourNumbers) {
+        private static final Pattern CODE = Pattern.compile("Card\\s+(\\d+):(.*)\\|(.*)");
 
         public static Card fromLine(String line) {
-            Matcher cardMatcher = CARD_PATTERN.matcher(line);
-            if (!cardMatcher.matches()) {
-                throw new IllegalArgumentException("Bad line: " + line);
-            }
+            MatchResult match = CODE.matcher(line)
+                    .results()
+                    .findFirst()
+                    .orElseThrow(() -> new IllegalStateException("Bad line: " + line));
             return new Card(
-                    Integer.parseInt(cardMatcher.group("cardId")),
-                    parseNumbers(cardMatcher.group("winningNums")),
-                    parseNumbers(cardMatcher.group("ourNums")));
+                    Integer.parseInt(match.group(1)),
+                    Utils.readUniqueLongsFromStr(match.group(2)),
+                    Utils.readUniqueLongsFromStr(match.group(3)));
         }
 
-        private static Set<Integer> parseNumbers(String listOfNumbers) {
-            return Arrays.stream(listOfNumbers.split(" "))
-                    .filter(s -> !s.isBlank())
-                    .map(Integer::parseInt)
-                    .collect(Collectors.toSet());
+        public int numberOfMatches() {
+            return Sets.intersection(winningNumbers, ourNumbers).size();
         }
     }
 }

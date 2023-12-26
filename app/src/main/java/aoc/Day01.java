@@ -2,7 +2,6 @@ package aoc;
 
 import aoc.commons.Input;
 import aoc.commons.Solutions;
-import com.google.common.annotations.VisibleForTesting;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -15,16 +14,14 @@ public final class Day01 implements Day {
         return new Solutions(String.valueOf(part1(lines)), String.valueOf(part2(lines)));
     }
 
-    @VisibleForTesting
-    static long part1(List<String> lines) {
+    private static long part1(List<String> lines) {
         return lines.stream()
                 .map(line -> line.replaceAll("\\D", ""))
                 .mapToInt(Day01::parseIntFromDigits)
                 .sum();
     }
 
-    @VisibleForTesting
-    static long part2(List<String> lines) {
+    private static long part2(List<String> lines) {
         Map<String, Integer> digitMap = makeDigitMap();
         return lines.stream()
                 .mapToInt(line -> {
@@ -33,7 +30,7 @@ public final class Day01 implements Day {
                                     Map.entry(line.indexOf(entry.getKey()), entry.getValue()),
                                     Map.entry(line.lastIndexOf(entry.getKey()), entry.getValue())))
                             .filter(entry -> entry.getKey() != -1)
-                            .sorted((a, b) -> a.getKey().compareTo(b.getKey()))
+                            .sorted(Map.Entry.comparingByKey())
                             .map(Map.Entry::getValue)
                             .toList();
                     // make integer from first and last digits

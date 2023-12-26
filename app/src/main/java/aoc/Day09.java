@@ -3,8 +3,9 @@ package aoc;
 import aoc.commons.Input;
 import aoc.commons.Solutions;
 import aoc.commons.Utils;
-import java.util.ArrayList;
+import com.google.common.collect.Lists;
 import java.util.List;
+import one.util.streamex.StreamEx;
 
 public class Day09 implements Day {
 
@@ -24,7 +25,7 @@ public class Day09 implements Day {
     static long part2(List<String> lines) {
         return lines.stream()
                 .map(Utils::readLongsFromStr)
-                .mapToLong(numbers -> extrapolate(Utils.reversed(numbers)))
+                .mapToLong(numbers -> extrapolate(Lists.reverse(numbers)))
                 .sum();
     }
 
@@ -32,14 +33,8 @@ public class Day09 implements Day {
         if (numbers.stream().allMatch(num -> num == 0)) {
             return 0;
         }
-        return extrapolate(adjDifference(numbers)) + numbers.get(numbers.size() - 1);
-    }
-
-    static List<Long> adjDifference(List<Long> nums) {
-        List<Long> adjacentDifferences = new ArrayList<>();
-        for (int i = 1; i < nums.size(); i++) {
-            adjacentDifferences.add(nums.get(i) - nums.get(i - 1));
-        }
-        return adjacentDifferences;
+        List<Long> differences =
+                StreamEx.of(numbers).pairMap((left, right) -> right - left).toList();
+        return extrapolate(differences) + numbers.get(numbers.size() - 1);
     }
 }

@@ -2,7 +2,7 @@ package aoc;
 
 import aoc.commons.Input;
 import aoc.commons.Solutions;
-import java.util.Arrays;
+import aoc.commons.Utils;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -55,18 +55,11 @@ public class Day06 implements Day {
             throw new RuntimeException("Bad input");
         }
 
-        List<Long> times = getNumbers(timeMatcher.group("numbers"));
-        List<Long> distances = getNumbers(disMatcher.group("numbers"));
+        List<Long> times = Utils.readLongsFromStr(timeMatcher.group("numbers"));
+        List<Long> distances = Utils.readLongsFromStr(disMatcher.group("numbers"));
         return IntStream.range(0, times.size())
                 .boxed()
                 .map(i -> new Race(times.get(i), distances.get(i)))
-                .toList();
-    }
-
-    private static List<Long> getNumbers(String numbers) {
-        return Arrays.stream(numbers.split(" "))
-                .filter(s -> !s.isEmpty())
-                .map(Long::parseLong)
                 .toList();
     }
 }
