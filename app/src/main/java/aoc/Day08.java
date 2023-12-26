@@ -46,7 +46,7 @@ class Day08 implements Day {
 
     static Iterator<Integer> circularIterator(String instructions) {
         int size = instructions.length();
-        return new Iterator<Integer>() {
+        return new Iterator<>() {
             int i = 0;
 
             @Override

@@ -5,6 +5,8 @@ import aoc.commons.Solutions;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import one.util.streamex.IntStreamEx;
+import one.util.streamex.StreamEx;
 
 class Day07 implements Day {
 
@@ -34,8 +36,8 @@ class Day07 implements Day {
         final String allCardsOrdered = "AKQT98765432J";
         List<Hand> sortedHands = hands.stream()
                 .sorted((p, q) -> {
-                    HandType typeP = HandType.determiHandTypeWithReplacement(p.cards, allCardsOrdered);
-                    HandType typeQ = HandType.determiHandTypeWithReplacement(q.cards, allCardsOrdered);
+                    HandType typeP = HandType.determineHandTypeWithReplacement(p.cards, allCardsOrdered);
+                    HandType typeQ = HandType.determineHandTypeWithReplacement(q.cards, allCardsOrdered);
                     return typeP.equals(typeQ)
                             ? compareCardsWithPriority(p.cards(), q.cards(), allCardsOrdered)
                             : typeP.compareTo(typeQ);
@@ -56,12 +58,11 @@ class Day07 implements Day {
     }
 
     private static int sumHands(List<Hand> sortedHands) {
-        int sum = 0, coeff = 1;
-        for (Hand hand : sortedHands) {
-            sum += coeff * hand.bid();
-            coeff++;
-        }
-        return sum;
+        return StreamEx.of(sortedHands)
+                .zipWith(IntStreamEx.range(1, sortedHands.size() + 1))
+                .mapKeyValue((hand, coefficient) -> hand.bid() * coefficient)
+                .mapToInt(Integer::intValue)
+                .sum();
     }
 
     enum HandType {
@@ -100,13 +101,12 @@ class Day07 implements Day {
             return HandType.HighCard;
         }
 
-        static HandType determiHandTypeWithReplacement(String cards, String replacements) {
+        static HandType determineHandTypeWithReplacement(String cards, String replacements) {
             return replacements
                     .chars()
                     .mapToObj(c -> String.valueOf((char) c))
                     .map(replacement -> determineHandType(cards.replaceAll("J", replacement)))
-                    .sorted((p, q) -> q.compareTo(p))
-                    .findFirst()
+                    .max(HandType::compareTo)
                     .orElseThrow();
         }
     }
@@ -114,7 +114,7 @@ class Day07 implements Day {
     record Hand(String cards, int bid) {
         public static Hand fromInputLine(String line) {
             String cards = line.substring(0, 5);
-            int bid = Integer.valueOf(line.substring(6));
+            int bid = Integer.parseInt(line.substring(6));
             return new Hand(cards, bid);
         }
     }

@@ -16,10 +16,13 @@ repositories {
 }
 
 dependencies {
+    implementation(libs.guava)
+    implementation("one.util:streamex:0.8.2")
+
     testImplementation(libs.junit.jupiter)
     testImplementation("org.assertj:assertj-core:3.11.1")
+
     testRuntimeOnly("org.junit.platform:junit-platform-launcher")
-    implementation(libs.guava)
 }
 
 application { mainClass.set("aoc.Main") }

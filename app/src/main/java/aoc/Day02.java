@@ -3,30 +3,39 @@ package aoc;
 import aoc.commons.Input;
 import aoc.commons.Solutions;
 import java.util.List;
-import java.util.Map;
-import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public final class Day02 implements Day {
 
-    private static final Pattern GAME = Pattern.compile("Game (\\d+)");
-
     @Override
     public Solutions solve() {
-        List<String> lines = Input.readLines(this.getClass().getSimpleName());
-        return new Solutions(String.valueOf(part1(lines)), String.valueOf(part2(lines)));
+        List<Game> games = Input.readLines(this.getClass().getSimpleName()).stream()
+                .map(Game::fromLine)
+                .toList();
+        return new Solutions(String.valueOf(part1(games)), String.valueOf(part2(games)));
     }
 
-    record RedGreenBlue(int red, int green, int blue) {
+    private static int part1(List<Game> games) {
+        final Game rgbThreshold = new Game(-1, 12, 13, 14);
+        return games.stream().filter(rgbThreshold::isAbove).mapToInt(Game::id).sum();
+    }
+
+    private static int part2(List<Game> games) {
+        return games.stream().mapToInt(Game::power).sum();
+    }
+
+    record Game(int id, int red, int green, int blue) {
+        private static final Pattern ID = Pattern.compile("Game (\\d+)");
         private static final Pattern RED = Pattern.compile("(\\d+) red");
         private static final Pattern GREEN = Pattern.compile("(\\d+) green");
         private static final Pattern BLUE = Pattern.compile("(\\d+) blue");
 
-        public static RedGreenBlue fromLine(String line) {
-            return new RedGreenBlue(biggestRollOf(RED, line), biggestRollOf(GREEN, line), biggestRollOf(BLUE, line));
+        public static Game fromLine(String line) {
+            return new Game(
+                    getGameId(line), biggestRollOf(RED, line), biggestRollOf(GREEN, line), biggestRollOf(BLUE, line));
         }
 
-        public boolean isAbove(RedGreenBlue that) {
+        public boolean isAbove(Game that) {
             return red >= that.red && green >= that.green && blue >= that.blue;
         }
 
@@ -42,29 +51,10 @@ public final class Day02 implements Day {
                     .max()
                     .orElse(0);
         }
-    }
 
-    private static int part1(List<String> lines) {
-        final RedGreenBlue rgbTreshold = new RedGreenBlue(12, 13, 14);
-        return lines.stream()
-                .map(line -> Map.entry(getGameId(line), RedGreenBlue.fromLine(line)))
-                .filter(entry -> rgbTreshold.isAbove(entry.getValue()))
-                .mapToInt(Map.Entry::getKey)
-                .sum();
-    }
-
-    private static int part2(List<String> lines) {
-        return lines.stream()
-                .map(RedGreenBlue::fromLine)
-                .mapToInt(RedGreenBlue::power)
-                .sum();
-    }
-
-    private static int getGameId(String line) {
-        Matcher gameMatcher = GAME.matcher(line);
-        if (gameMatcher.find()) {
-            return Integer.parseInt(gameMatcher.group(1));
+        private static int getGameId(String line) {
+            return Integer.parseInt(
+                    ID.matcher(line).results().findFirst().orElseThrow().group(1));
         }
-        throw new RuntimeException("fml");
     }
 }
