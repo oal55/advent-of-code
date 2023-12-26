@@ -1,25 +1,33 @@
+package aoc;
+
+import aoc.Day;
+import aoc.commons.Input;
+import aoc.commons.Solutions;
 import java.util.Arrays;
 import java.util.List;
 import java.util.regex.Pattern;
 import java.util.stream.IntStream;
 import java.util.regex.Matcher;
 
-public class Day06 {
-    record Race(long time, long distance) {}
+public class Day06 implements Day {
 
-    public static void main(String[] args) {
-        List<String> lines = Commons.readStdInLines();
-
-        // part1
-        System.out.println(multiplyNumWinningWaysForRaces(
-            parseRaces(lines.get(0), lines.get(1))));
-
-        // part2
-        System.out.println(multiplyNumWinningWaysForRaces(
-            parseRaces(
-                    lines.get(0).replaceAll("\\s", ""),
-                    lines.get(1).replaceAll("\\s", ""))));
+    @Override
+    public Solutions solve() {
+        List<String> lines = Input.readLines(this.getClass().getSimpleName());
+        return new Solutions(String.valueOf(part1(lines)), String.valueOf(part2(lines)));
     }
+
+    static long part1(List<String> lines) {
+        return multiplyNumWinningWaysForRaces(parseRaces(lines.get(0), lines.get(1)));
+    }
+
+    static long part2(List<String> lines) {
+        return multiplyNumWinningWaysForRaces(parseRaces(
+                lines.get(0).replaceAll("\\s", ""),
+                lines.get(1).replaceAll("\\s", "")));
+    }
+
+    record Race(long time, long distance) {}
 
     private static long multiplyNumWinningWaysForRaces(List<Race> races) {
         return races.stream()

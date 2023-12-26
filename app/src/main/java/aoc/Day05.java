@@ -1,23 +1,29 @@
+package aoc;
+
+import aoc.commons.Input;
+import aoc.commons.Solutions;
+import aoc.commons.Stanza;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Stream;
 
-public class Day05 {
+public class Day05 implements Day {
 
-    public static void main(String[] args) {
-        String[] stanzas = Commons.readStdIn().split("\n\n");
-
-        List<Converter> converters = Arrays.stream(stanzas).skip(1) // skip the seeds one
-                .map(stanza -> Converter.fromStanza(Arrays.asList(stanza.split("\n"))))
+    @Override
+    public Solutions solve() {
+        List<Stanza> stanzas = Input.readStanzas(this.getClass().getSimpleName());
+        List<Converter> converters = stanzas.stream()
+                .skip(1) // skip the seeds
+                .map(Converter::fromStanza)
                 .toList();
-
-        System.out.println(partOne(stanzas[0], converters));
-        System.out.println(partTwo(stanzas[0], converters));
+        return new Solutions(
+                String.valueOf(part1(stanzas.get(0), converters)),
+                String.valueOf(part2(stanzas.get(0), converters)));
     }
 
-    private static long partOne(String seedStanza, List<Converter> converters) {
-        List<Long> seeds = Arrays.stream(seedStanza.substring("Seeds:".length()).split("\\s+"))
+    private static long part1(Stanza seedStanza, List<Converter> converters) {
+        List<Long> seeds = Arrays.stream(seedStanza.get().substring("Seeds:".length()).split("\\s+"))
                 .filter(s -> !s.isBlank())
                 .map(Long::valueOf)
                 .toList();
@@ -30,8 +36,8 @@ public class Day05 {
                 .min(Long::compare).orElseThrow();
     }
 
-    private static long partTwo(String seedStanza, List<Converter> converters) {
-        List<SeedRange> seeds = SeedRange.fromInputLine(seedStanza.substring("Seeds:".length()));
+    private static long part2(Stanza seedStanza, List<Converter> converters) {
+        List<SeedRange> seeds = SeedRange.fromInputLine(seedStanza.get().substring("Seeds:".length()));
         return converters.stream()
                 .reduce(
                         seeds.stream(),
@@ -106,8 +112,8 @@ public class Day05 {
             return newSeeds.stream();
         }
 
-        public static Converter fromStanza(List<String> lines) {
-            return new Converter(lines.stream()
+        public static Converter fromStanza(Stanza stanza) {
+            return new Converter(stanza.getLines().stream()
                     .skip(1) // skip the header
                     .map(Range::fromInputLine)
                     .sorted((p, q) -> Long.compare(p.start(), q.start()))
