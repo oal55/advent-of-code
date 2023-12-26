@@ -23,8 +23,8 @@ class Day07 implements Day {
                     HandType typeP = HandType.determineHandType(p.cards);
                     HandType typeQ = HandType.determineHandType(q.cards);
                     return typeP.equals(typeQ)
-                        ? compareCardsWithPriority(p.cards(), q.cards(), "AKQJT98765432")
-                        : typeP.compareTo(typeQ);
+                            ? compareCardsWithPriority(p.cards(), q.cards(), "AKQJT98765432")
+                            : typeP.compareTo(typeQ);
                 })
                 .toList();
         return sumHands(sortedHands);
@@ -37,8 +37,8 @@ class Day07 implements Day {
                     HandType typeP = HandType.determiHandTypeWithReplacement(p.cards, allCardsOrdered);
                     HandType typeQ = HandType.determiHandTypeWithReplacement(q.cards, allCardsOrdered);
                     return typeP.equals(typeQ)
-                        ? compareCardsWithPriority(p.cards(), q.cards(), allCardsOrdered)
-                        : typeP.compareTo(typeQ);
+                            ? compareCardsWithPriority(p.cards(), q.cards(), allCardsOrdered)
+                            : typeP.compareTo(typeQ);
                 })
                 .toList();
         return sumHands(sortedHands);
@@ -78,7 +78,7 @@ class Day07 implements Day {
             for (char c : cards.toCharArray()) {
                 freqs.put(c, freqs.getOrDefault(c, 0) + 1);
             }
-    
+
             if (freqs.size() == 1) {
                 return HandType.FiveOfAKind;
             }
@@ -101,11 +101,13 @@ class Day07 implements Day {
         }
 
         static HandType determiHandTypeWithReplacement(String cards, String replacements) {
-            return replacements.chars()
+            return replacements
+                    .chars()
                     .mapToObj(c -> String.valueOf((char) c))
                     .map(replacement -> determineHandType(cards.replaceAll("J", replacement)))
                     .sorted((p, q) -> q.compareTo(p))
-                    .findFirst().orElseThrow();
+                    .findFirst()
+                    .orElseThrow();
         }
     }
 

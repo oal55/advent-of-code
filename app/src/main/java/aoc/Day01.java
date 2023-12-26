@@ -28,13 +28,14 @@ public final class Day01 implements Day {
         Map<String, Integer> digitMap = makeDigitMap();
         return lines.stream()
                 .mapToInt(line -> {
-                     List<Integer> digits = digitMap.entrySet().stream().flatMap(entry -> Stream.of(
-                            Map.entry(line.indexOf(entry.getKey()), entry.getValue()),
-                            Map.entry(line.lastIndexOf(entry.getKey()), entry.getValue())))
-                        .filter(entry -> entry.getKey() != -1)
-                        .sorted((a, b) -> a.getKey().compareTo(b.getKey()))
-                        .map(Map.Entry::getValue)
-                        .toList();
+                    List<Integer> digits = digitMap.entrySet().stream()
+                            .flatMap(entry -> Stream.of(
+                                    Map.entry(line.indexOf(entry.getKey()), entry.getValue()),
+                                    Map.entry(line.lastIndexOf(entry.getKey()), entry.getValue())))
+                            .filter(entry -> entry.getKey() != -1)
+                            .sorted((a, b) -> a.getKey().compareTo(b.getKey()))
+                            .map(Map.Entry::getValue)
+                            .toList();
                     // make integer from first and last digits
                     return digits.get(0) * 10 + digits.get(digits.size() - 1);
                 })
@@ -62,8 +63,6 @@ public final class Day01 implements Day {
     private static int parseIntFromDigits(String digits) {
         char first = digits.charAt(0);
         char last = digits.charAt(digits.length() - 1);
-        return (
-            10 * Character.getNumericValue(first) +
-            Character.getNumericValue(last));
+        return (10 * Character.getNumericValue(first) + Character.getNumericValue(last));
     }
 }

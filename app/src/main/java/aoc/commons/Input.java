@@ -10,7 +10,8 @@ import java.util.List;
 
 public class Input {
     private static final String INPUT_FILES_ROOT_DIR = "src/main/resources/";
-    private Input() { }
+
+    private Input() {}
 
     public static List<String> readLines(final String className) {
         try {
@@ -30,9 +31,6 @@ public class Input {
     }
 
     public static List<Stanza> readStanzas(final String className) {
-        return Arrays.stream(read(className).split("\n\n"))
-                .map(Stanza::of)
-                .toList();
+        return Arrays.stream(read(className).split("\n\n")).map(Stanza::of).toList();
     }
-
 }

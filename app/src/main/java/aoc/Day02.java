@@ -23,21 +23,24 @@ public final class Day02 implements Day {
         private static final Pattern BLUE = Pattern.compile("(\\d+) blue");
 
         public static RedGreenBlue fromLine(String line) {
-            return new RedGreenBlue(
-                    biggestRollOf(RED, line),
-                    biggestRollOf(GREEN, line),
-                    biggestRollOf(BLUE, line));
+            return new RedGreenBlue(biggestRollOf(RED, line), biggestRollOf(GREEN, line), biggestRollOf(BLUE, line));
         }
 
-        public boolean isAbove(RedGreenBlue that) { return red >= that.red && green >= that.green && blue >= that.blue; }
+        public boolean isAbove(RedGreenBlue that) {
+            return red >= that.red && green >= that.green && blue >= that.blue;
+        }
 
-        public int power() { return red * green * blue; }
+        public int power() {
+            return red * green * blue;
+        }
 
         private static int biggestRollOf(Pattern coloPattern, String line) {
-            return coloPattern.matcher(line)
+            return coloPattern
+                    .matcher(line)
                     .results()
                     .mapToInt(result -> Integer.parseInt(result.group(1)))
-                    .max().orElse(0);
+                    .max()
+                    .orElse(0);
         }
     }
 
