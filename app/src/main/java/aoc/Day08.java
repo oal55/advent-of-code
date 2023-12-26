@@ -32,9 +32,10 @@ class Day08 implements Day {
     }
 
     static int iterateTillSuffix(
-            String instructions, Map<String, List<String>> graph, String node, String targetSuffix) {
+            String instructions, Map<String, List<String>> graph, String startingNode, String targetSuffix) {
         Iterator<Integer> it = circularIterator(instructions);
         int numSteps = 0;
+        String node = startingNode;
         while (!node.endsWith(targetSuffix)) {
             int direction = it.next();
             node = graph.get(node).get(direction);
