@@ -1,3 +1,7 @@
+package aoc;
+
+import aoc.commons.Input;
+import aoc.commons.Solutions;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -6,20 +10,23 @@ import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-class Day08 {
-    public static void main(String[] args) {
-        List<String> lines = Commons.readStdInLines();
+class Day08 implements Day {
+
+    @Override
+    public Solutions solve() {
+        List<String> lines = Input.readLines(this.getClass().getSimpleName());
         Map<String, List<String>> graph = makeGraph(lines.stream().skip(2).toList());
 
-        System.out.println(partOne(lines.get(0), graph));
-        System.out.println(partTwo(lines.get(0), graph));
+        return new Solutions(
+                String.valueOf(part1(lines.get(0), graph)),
+                String.valueOf(part2(lines.get(0), graph)));
     }
 
-    static int partOne(String instructions, Map<String, List<String>> graph) {
+    static int part1(String instructions, Map<String, List<String>> graph) {
         return iterateTillSuffix(instructions, graph, "AAA", "ZZZ");
     }
 
-    static long partTwo(String instructions, Map<String, List<String>> graph) {
+    static long part2(String instructions, Map<String, List<String>> graph) {
         return graph.keySet()
                 .stream()
                 .filter(node -> node.endsWith("A")) // start nodes

@@ -1,24 +1,30 @@
+package aoc;
+
+import aoc.commons.Input;
+import aoc.commons.Solutions;
+import com.google.common.annotations.VisibleForTesting;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Stream;
 
-public final class Day01 {
-
-    public static void main(String[] args) throws Exception {
-        List<String> lines = Commons.readStdInLines();
-        System.out.println(partOne(lines));
-        System.out.println(partTwo(lines));
+public final class Day01 implements Day {
+    @Override
+    public Solutions solve() {
+        List<String> lines = Input.readLines(this.getClass().getSimpleName());
+        return new Solutions(String.valueOf(part1(lines)), String.valueOf(part2(lines)));
     }
 
-    private static int partOne(List<String> lines) {
+    @VisibleForTesting
+    static long part1(List<String> lines) {
         return lines.stream()
                 .map(line -> line.replaceAll("\\D", ""))
                 .mapToInt(Day01::parseIntFromDigits)
                 .sum();
     }
 
-    private static int partTwo(List<String> lines) {
+    @VisibleForTesting
+    static long part2(List<String> lines) {
         Map<String, Integer> digitMap = makeDigitMap();
         return lines.stream()
                 .mapToInt(line -> {

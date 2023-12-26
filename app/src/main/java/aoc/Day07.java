@@ -1,16 +1,23 @@
+package aoc;
+
+import aoc.commons.Input;
+import aoc.commons.Solutions;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-class Day07 {
-    public static void main(String[] args) {
-        List<Hand> hands = Commons.readStdInLines().stream().map(Hand::fromInputLine).toList();
+class Day07 implements Day {
 
-        System.out.println(partOne(hands));
-        System.out.println(partTwo(hands));
+    @Override
+    public Solutions solve() {
+        List<Hand> hands = Input.readLines(this.getClass().getSimpleName()).stream()
+                .map(Hand::fromInputLine)
+                .toList();
+
+        return new Solutions(String.valueOf(part1(hands)), String.valueOf(part2(hands)));
     }
 
-    private static int partOne(List<Hand> hands) {
+    private static int part1(List<Hand> hands) {
         List<Hand> sortedHands = hands.stream()
                 .sorted((p, q) -> {
                     HandType typeP = HandType.determineHandType(p.cards);
@@ -23,7 +30,7 @@ class Day07 {
         return sumHands(sortedHands);
     }
 
-    private static int partTwo(List<Hand> hands) {
+    private static int part2(List<Hand> hands) {
         final String allCardsOrdered = "AKQT98765432J";
         List<Hand> sortedHands = hands.stream()
                 .sorted((p, q) -> {

@@ -1,16 +1,21 @@
+package aoc;
+
+import aoc.commons.Input;
+import aoc.commons.Solutions;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Day03 {
+public class Day03 implements Day {
 
-    public static void main(String[] args) throws Exception {
-        List<String> lines = Commons.readStdInLines();
-
-        System.out.println(partOne(new MatrixContext(makeMatrix(lines))));
-        System.out.println(partTwo(new MatrixContext(makeMatrix(lines))));
+    @Override
+    public Solutions solve() {
+        List<String> lines = Input.readLines(this.getClass().getSimpleName());
+        return new Solutions(
+                String.valueOf(part1(new MatrixContext(makeMatrix(lines)))),
+                String.valueOf(part2(new MatrixContext(makeMatrix(lines)))));
     }
 
-    private static int partOne(MatrixContext context) {
+    private static int part1(MatrixContext context) {
         List<Integer> allPartNumbers = new ArrayList<>();
         context.analyze((i, j) -> {
             if (context.isSymbol(i, j)) {
@@ -20,7 +25,7 @@ public class Day03 {
         return allPartNumbers.stream().mapToInt(q -> q).sum();
     }
 
-    private static int partTwo(MatrixContext context) {
+    private static int part2(MatrixContext context) {
         List<Integer> allPartNumbers = new ArrayList<>();
         context.analyze((i, j) -> {
             if (context.isEngine(i, j)) {

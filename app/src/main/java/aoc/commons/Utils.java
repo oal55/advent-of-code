@@ -1,24 +1,12 @@
+package aoc.commons;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.Scanner;
 import java.util.regex.Pattern;
 
-public class Commons {
+public class Utils {
     private static final Pattern INT_PATTERN = Pattern.compile("-?\\d+");
-
-    public static List<String> readStdInLines() {
-        ArrayList<String> lines = new ArrayList<>();
-        try (Scanner stdIn = new Scanner(System.in)) {
-            while (stdIn.hasNextLine()) {
-                lines.add(stdIn.nextLine());
-            }
-        }
-        return lines;
-    }
-    public static String readStdIn() {
-        return String.join("\n", readStdInLines());
-    }
 
     public static List<Long> readLongsFromStr(String text) {
         return INT_PATTERN.matcher(text).results()
@@ -32,4 +20,5 @@ public class Commons {
         Collections.reverse(reversed);
         return reversed;
     }
+
 }

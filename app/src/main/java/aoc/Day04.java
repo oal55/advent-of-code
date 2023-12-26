@@ -1,3 +1,7 @@
+package aoc;
+
+import aoc.commons.Input;
+import aoc.commons.Solutions;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
@@ -5,15 +9,15 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
-public class Day04 {
+public class Day04 implements Day {
 
-    public static void main(String[] args) {
-        List<String> lines = Commons.readStdInLines();
-        System.out.println(partOne(lines));
-        System.out.println(partTwo(lines));
+    @Override
+    public Solutions solve() {
+        List<String> lines = Input.readLines(this.getClass().getSimpleName());
+        return new Solutions(String.valueOf(part1(lines)), String.valueOf(part2(lines)));
     }
 
-    private static int partOne(List<String> lines) {
+    private static int part1(List<String> lines) {
         return lines.stream()
                 .map(Card::fromLine)
                 .map(card -> 
@@ -24,7 +28,7 @@ public class Day04 {
                 .sum();
     }
 
-    private static int partTwo(List<String> lines) {
+    private static int part2(List<String> lines) {
         List<Integer> numMatchesForCards = lines.stream()
                 .map(Card::fromLine)
                 .map(card -> 
