@@ -47,13 +47,14 @@ pmd {
 
 tasks.named<Test>("test") { useJUnitPlatform() }
 
-gradle.taskGraph.whenReady(closureOf<TaskExecutionGraph> {
-    println("Found task graph: $this")
-    println("Found " + allTasks.size + " tasks.")
-    allTasks.forEach { task ->
-        println(task)
-        task.dependsOn.forEach { dep ->
-            println("  - $dep")
-        }
-    }
-})
+// Janky task dependency shenanigans for debugging stuff o.O
+//gradle.taskGraph.whenReady(closureOf<TaskExecutionGraph> {
+//    println("Found task graph: $this")
+//    println("Found " + allTasks.size + " tasks.")
+//    allTasks.forEach { task ->
+//        println(task)
+//        task.dependsOn.forEach { dep ->
+//            println("  - $dep")
+//        }
+//    }
+//})

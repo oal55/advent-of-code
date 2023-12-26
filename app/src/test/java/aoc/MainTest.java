@@ -62,4 +62,11 @@ class MainTest {
         assertThat(solutions.part1()).isEqualTo("15871");
         assertThat(solutions.part2()).isEqualTo("11283670395017");
     }
+
+    @Test
+    void testDay09() {
+        Solutions solutions = new Day09().solve();
+        assertThat(solutions.part1()).isEqualTo("2038472161");
+        assertThat(solutions.part2()).isEqualTo("1091");
+    }
 }
