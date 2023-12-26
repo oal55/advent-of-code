@@ -10,7 +10,7 @@ public class Day09 implements Day {
 
     @Override
     public Solutions solve() {
-        List<String> lines =      Input.readLines(this.getClass().getSimpleName());
+        List<String> lines = Input.readLines(this.getClass().getSimpleName());
         return new Solutions(String.valueOf(part1(lines)), String.valueOf(part2(lines)));
     }
 
