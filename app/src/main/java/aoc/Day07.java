@@ -5,7 +5,6 @@ import aoc.commons.Solutions;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.atomic.AtomicInteger;
 import one.util.streamex.IntStreamEx;
 import one.util.streamex.StreamEx;
 
