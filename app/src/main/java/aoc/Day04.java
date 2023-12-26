@@ -20,10 +20,9 @@ public class Day04 implements Day {
     private static int part1(List<String> lines) {
         return lines.stream()
                 .map(Card::fromLine)
-                .map(card -> 
-                        card.winningNumbers.stream()
-                                .filter(card.ourNumbers::contains)
-                                .count()) // intersection size
+                .map(card -> card.winningNumbers.stream()
+                        .filter(card.ourNumbers::contains)
+                        .count()) // intersection size
                 .mapToInt(intersectionSize -> 1 << (intersectionSize - 1))
                 .sum();
     }
@@ -31,10 +30,9 @@ public class Day04 implements Day {
     private static int part2(List<String> lines) {
         List<Integer> numMatchesForCards = lines.stream()
                 .map(Card::fromLine)
-                .map(card -> 
-                        (int) card.winningNumbers.stream()
-                                .filter(card.ourNumbers::contains)
-                                .count()) // intersection size
+                .map(card -> (int) card.winningNumbers.stream()
+                        .filter(card.ourNumbers::contains)
+                        .count()) // intersection size
                 .toList();
 
         int[] diffs = new int[1000]; // sozzles D:
@@ -50,8 +48,9 @@ public class Day04 implements Day {
     }
 
     record Card(int id, Set<Integer> winningNumbers, Set<Integer> ourNumbers) {
-        private static final Pattern CARD_PATTERN = Pattern.compile("Card\\s+(?<cardId>\\d+):(?<winningNums>.*)\\|(?<ourNums>.*)");
-        
+        private static final Pattern CARD_PATTERN =
+                Pattern.compile("Card\\s+(?<cardId>\\d+):(?<winningNums>.*)\\|(?<ourNums>.*)");
+
         public static Card fromLine(String line) {
             Matcher cardMatcher = CARD_PATTERN.matcher(line);
             if (!cardMatcher.matches()) {
@@ -65,9 +64,9 @@ public class Day04 implements Day {
 
         private static Set<Integer> parseNumbers(String listOfNumbers) {
             return Arrays.stream(listOfNumbers.split(" "))
-                .filter(s -> !s.isBlank())
-                .map(Integer::parseInt)
-                .collect(Collectors.toSet());
+                    .filter(s -> !s.isBlank())
+                    .map(Integer::parseInt)
+                    .collect(Collectors.toSet());
         }
     }
 }

@@ -1,13 +1,12 @@
 package aoc;
 
-import aoc.Day;
 import aoc.commons.Input;
 import aoc.commons.Solutions;
 import java.util.Arrays;
 import java.util.List;
+import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.IntStream;
-import java.util.regex.Matcher;
 
 public class Day06 implements Day {
 
@@ -22,17 +21,14 @@ public class Day06 implements Day {
     }
 
     static long part2(List<String> lines) {
-        return multiplyNumWinningWaysForRaces(parseRaces(
-                lines.get(0).replaceAll("\\s", ""),
-                lines.get(1).replaceAll("\\s", "")));
+        return multiplyNumWinningWaysForRaces(
+                parseRaces(lines.get(0).replaceAll("\\s", ""), lines.get(1).replaceAll("\\s", "")));
     }
 
     record Race(long time, long distance) {}
 
     private static long multiplyNumWinningWaysForRaces(List<Race> races) {
-        return races.stream()
-                .map(Day06::numWaysToWin)
-                .reduce(1L, (a, b) -> a * b);
+        return races.stream().map(Day06::numWaysToWin).reduce(1L, (a, b) -> a * b);
     }
 
     private static long numWaysToWin(Race race) {
@@ -61,9 +57,10 @@ public class Day06 implements Day {
 
         List<Long> times = getNumbers(timeMatcher.group("numbers"));
         List<Long> distances = getNumbers(disMatcher.group("numbers"));
-        return IntStream.range(0, times.size()).boxed()
-            .map(i -> new Race(times.get(i), distances.get(i)))
-            .toList();
+        return IntStream.range(0, times.size())
+                .boxed()
+                .map(i -> new Race(times.get(i), distances.get(i)))
+                .toList();
     }
 
     private static List<Long> getNumbers(String numbers) {

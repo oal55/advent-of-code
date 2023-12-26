@@ -9,7 +9,9 @@ public class Utils {
     private static final Pattern INT_PATTERN = Pattern.compile("-?\\d+");
 
     public static List<Long> readLongsFromStr(String text) {
-        return INT_PATTERN.matcher(text).results()
+        return INT_PATTERN
+                .matcher(text)
+                .results()
                 .map(r -> r.group())
                 .map(Long::parseLong)
                 .toList();
@@ -20,5 +22,4 @@ public class Utils {
         Collections.reverse(reversed);
         return reversed;
     }
-
 }

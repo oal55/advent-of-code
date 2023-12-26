@@ -18,22 +18,23 @@ public class Day05 implements Day {
                 .map(Converter::fromStanza)
                 .toList();
         return new Solutions(
-                String.valueOf(part1(stanzas.get(0), converters)),
-                String.valueOf(part2(stanzas.get(0), converters)));
+                String.valueOf(part1(stanzas.get(0), converters)), String.valueOf(part2(stanzas.get(0), converters)));
     }
 
     private static long part1(Stanza seedStanza, List<Converter> converters) {
-        List<Long> seeds = Arrays.stream(seedStanza.get().substring("Seeds:".length()).split("\\s+"))
+        List<Long> seeds = Arrays.stream(
+                        seedStanza.get().substring("Seeds:".length()).split("\\s+"))
                 .filter(s -> !s.isBlank())
                 .map(Long::valueOf)
                 .toList();
 
         return converters.stream()
                 .reduce(
-                    seeds.stream(),
-                    (seedStream, converter) -> seedStream.map(converter::convert),
-                    (p, q) -> Stream.of())
-                .min(Long::compare).orElseThrow();
+                        seeds.stream(),
+                        (seedStream, converter) -> seedStream.map(converter::convert),
+                        (p, q) -> Stream.of())
+                .min(Long::compare)
+                .orElseThrow();
     }
 
     private static long part2(Stanza seedStanza, List<Converter> converters) {
@@ -45,12 +46,16 @@ public class Day05 implements Day {
                         (p, q) -> Stream.of())
                 .map(SeedRange::start)
                 .sorted()
-                .findFirst().orElseThrow();
+                .findFirst()
+                .orElseThrow();
     }
 
     record SeedRange(long start, long end) {
         public static List<SeedRange> fromInputLine(String line) {
-            List<Long> allNums = Arrays.stream(line.split("\\s+")).filter(s -> !s.isBlank()).map(s -> Long.valueOf(s)).toList();
+            List<Long> allNums = Arrays.stream(line.split("\\s+"))
+                    .filter(s -> !s.isBlank())
+                    .map(s -> Long.valueOf(s))
+                    .toList();
             List<SeedRange> ranges = new ArrayList<>();
             for (int i = 0; i < allNums.size() - 1; i += 2) {
                 ranges.add(new SeedRange(allNums.get(i), allNums.get(i) + allNums.get(i + 1) - 1));
@@ -73,20 +78,19 @@ public class Day05 implements Day {
         }
 
         public static Range fromInputLine(String line) {
-            List<Long> parts = Arrays.stream(line.split("\\s+")).map(s -> Long.valueOf(s)).toList();
-            return new Range(
-                    parts.get(1),
-                    parts.get(1) + parts.get(2) - 1,
-                    parts.get(0) - parts.get(1));
+            List<Long> parts =
+                    Arrays.stream(line.split("\\s+")).map(s -> Long.valueOf(s)).toList();
+            return new Range(parts.get(1), parts.get(1) + parts.get(2) - 1, parts.get(0) - parts.get(1));
         }
     }
 
     record Converter(List<Range> ranges) {
-        public long convert (long num) {
+        public long convert(long num) {
             return ranges.stream()
                     .filter(range -> range.contains(num))
                     .findFirst()
-                    .map(range -> num + range.offset).orElse(num);
+                    .map(range -> num + range.offset)
+                    .orElse(num);
         }
 
         public Stream<SeedRange> convertRange(SeedRange seed) {
@@ -102,8 +106,7 @@ public class Day05 implements Day {
                     start = range.start();
                 }
                 long newStart = Math.min(seed.end(), range.end()) + 1;
-                newSeeds.add(
-                    new SeedRange(start, newStart - 1).offset(range.offset())); // not counting new start
+                newSeeds.add(new SeedRange(start, newStart - 1).offset(range.offset())); // not counting new start
                 start = newStart;
             }
             if (start <= seed.end()) {
@@ -120,5 +123,4 @@ public class Day05 implements Day {
                     .toList());
         }
     }
-
 }

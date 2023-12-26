@@ -17,9 +17,7 @@ class Day08 implements Day {
         List<String> lines = Input.readLines(this.getClass().getSimpleName());
         Map<String, List<String>> graph = makeGraph(lines.stream().skip(2).toList());
 
-        return new Solutions(
-                String.valueOf(part1(lines.get(0), graph)),
-                String.valueOf(part2(lines.get(0), graph)));
+        return new Solutions(String.valueOf(part1(lines.get(0), graph)), String.valueOf(part2(lines.get(0), graph)));
     }
 
     static int part1(String instructions, Map<String, List<String>> graph) {
@@ -27,14 +25,14 @@ class Day08 implements Day {
     }
 
     static long part2(String instructions, Map<String, List<String>> graph) {
-        return graph.keySet()
-                .stream()
+        return graph.keySet().stream()
                 .filter(node -> node.endsWith("A")) // start nodes
                 .map(node -> (long) iterateTillSuffix(instructions, graph, node, "Z")) // num steps to Z
                 .reduce(1L, Day08::lcm);
     }
 
-    static int iterateTillSuffix(String instructions, Map<String, List<String>> graph, String node, String targetSuffix) {
+    static int iterateTillSuffix(
+            String instructions, Map<String, List<String>> graph, String node, String targetSuffix) {
         Iterator<Integer> it = circularIterator(instructions);
         int numSteps = 0;
         while (!node.endsWith(targetSuffix)) {
@@ -51,8 +49,10 @@ class Day08 implements Day {
             int i = 0;
 
             @Override
-            public boolean hasNext() { return true; }
-    
+            public boolean hasNext() {
+                return true;
+            }
+
             @Override
             public Integer next() {
                 char next = instructions.charAt(i % size);
@@ -79,8 +79,10 @@ class Day08 implements Day {
 
     static long gcd(long p, long q) {
         if (q == 0) return p;
-        return (gcd (q, p % q));
+        return (gcd(q, p % q));
     }
 
-    static long lcm(long p, long q) { return p / gcd(p, q) * q; }
+    static long lcm(long p, long q) {
+        return p / gcd(p, q) * q;
+    }
 }

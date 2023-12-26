@@ -21,6 +21,8 @@ dependencies {
     implementation(libs.guava)
 }
 
+application { mainClass.set("aoc.Main") }
+
 // Apply a specific Java toolchain to ease working on different environments.
 java {
     toolchain {
@@ -28,6 +30,22 @@ java {
     }
 }
 
-application { mainClass.set("aoc.Main") }
+spotless {
+    java {
+        importOrder()
+        removeUnusedImports()
+        palantirJavaFormat()
+    }
+}
+
+pmd {
+    toolVersion = "6.55.0"
+    sourceSets = listOf(pmd.sourceSets.find { it.name == SourceSet.MAIN_SOURCE_SET_NAME })
+    ruleSetFiles = files("./.myJankConfigFiles/pmd-disable-some-rules.xml")
+}
+
 
 tasks.named<Test>("test") { useJUnitPlatform() }
+tasks.compileJava {
+    dependsOn(tasks.spotlessApply)
+}

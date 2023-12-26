@@ -6,7 +6,10 @@ import java.util.List;
 public class Stanza {
     private final String value;
 
-    private Stanza(String value) { this.value = value; }
+    private Stanza(String value) {
+        this.value = value;
+    }
+
     public static Stanza of(String value) {
         return new Stanza(value);
     }

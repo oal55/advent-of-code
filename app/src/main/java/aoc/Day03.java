@@ -42,7 +42,9 @@ public class Day03 implements Day {
         return lines.stream().map(String::toCharArray).toArray(char[][]::new);
     }
 
-    interface Analyzer { void analyze(int i, int j); }
+    interface Analyzer {
+        void analyze(int i, int j);
+    }
 
     record MatrixContext(char[][] matrix, int I, int J) {
         private static final int[][] DIRS = {{-1, 0}, {1, 0}, {0, -1}, {0, 1}, {1, 1}, {-1, -1}, {-1, 1}, {1, -1}};
@@ -62,14 +64,16 @@ public class Day03 implements Day {
             return allPartNumbers.stream().mapToInt(q -> q).sum();
         }
 
-        private boolean validCoordinate(int i, int j) { return i >=0 && i < I && j >= 0 && j < J; }
+        private boolean validCoordinate(int i, int j) {
+            return i >= 0 && i < I && j >= 0 && j < J;
+        }
 
-        public boolean isEngine(int i, int j) { return validCoordinate(i, j) && matrix[i][j] == '*'; }
+        public boolean isEngine(int i, int j) {
+            return validCoordinate(i, j) && matrix[i][j] == '*';
+        }
 
         public boolean isSymbol(int i, int j) {
-            return (
-                    validCoordinate(i, j) &&
-                    !(matrix[i][j] == '.' || Character.isDigit(matrix[i][j])));
+            return (validCoordinate(i, j) && !(matrix[i][j] == '.' || Character.isDigit(matrix[i][j])));
         }
 
         public boolean isDigit(int i, int j) {
@@ -87,10 +91,12 @@ public class Day03 implements Day {
             }
             return partNumbers;
         }
-    
+
         private int readPartNumberAndMark(int i, int j) {
             int partNumber = 0;
-            while (isDigit(i, j - 1)) { --j; } // j is now at the first digit of the part number
+            while (isDigit(i, j - 1)) {
+                --j;
+            } // j is now at the first digit of the part number
             while (isDigit(i, j)) {
                 partNumber = partNumber * 10 + Character.getNumericValue(matrix[i][j]);
                 matrix[i][j] = '.'; // this is how we mark.
