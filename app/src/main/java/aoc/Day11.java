@@ -7,11 +7,6 @@ import one.util.streamex.IntStreamEx;
 import one.util.streamex.StreamEx;
 
 public class Day11 implements Day {
-    private static List<Long> cumulativeColumnDistances(char[][] matrix, long expansionFactor) {
-        return StreamEx.of(matrix)
-                .map(row -> IntStreamEx.of(row).has('#') ? 1L : expansionFactor)
-                .scanLeft(Long::sum);
-    }
 
     @Override
     public Solutions solve() {
@@ -26,12 +21,17 @@ public class Day11 implements Day {
     private static long calculateSumOfDistances(char[][] matrix, long expansionFactor) {
         List<Long> rowDists = cumulativeColumnDistances(matrix, expansionFactor);
         List<Long> colDists = cumulativeColumnDistances(transpose(matrix), expansionFactor);
-
         return StreamEx.ofPairs(
-                        getCoordinates(matrix),
+                        getGalaxyCoordinates(matrix),
                         (p, q) -> getLinearDistance(p.j(), q.j(), colDists) + getLinearDistance(p.i(), q.i(), rowDists))
                 .mapToLong(Long::longValue)
                 .sum();
+    }
+
+    private static List<Long> cumulativeColumnDistances(char[][] matrix, long expansionFactor) {
+        return StreamEx.of(matrix)
+                .map(row -> IntStreamEx.of(row).has('#') ? 1L : expansionFactor)
+                .scanLeft(Long::sum);
     }
 
     private static long getLinearDistance(int coordinate1, int coordinate2, List<Long> cumulativeDists) {
@@ -49,17 +49,13 @@ public class Day11 implements Day {
         return transposed;
     }
 
-    private static List<Coordinate> getCoordinates(char[][] matrix) {
+    private static List<Coordinate> getGalaxyCoordinates(char[][] matrix) {
         int I = matrix.length, J = matrix[0].length;
         return IntStreamEx.range(I)
                 .flatMapToObj(i ->
-                        IntStreamEx.range(J).filter(j -> matrix[i][j] == '#').mapToObj(j -> Coordinate.of(i, j)))
+                        IntStreamEx.range(J).filter(j -> matrix[i][j] == '#').mapToObj(j -> new Coordinate(i, j)))
                 .toList();
     }
 
-    record Coordinate(int i, int j) {
-        public static Coordinate of(int i, int j) {
-            return new Coordinate(i, j);
-        }
-    }
+    record Coordinate(int i, int j) {}
 }
