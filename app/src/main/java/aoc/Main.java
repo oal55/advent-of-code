@@ -35,6 +35,7 @@ public class Main {
                 new DayAndTitle("Day 6: Wait For It", new Day06()),
                 new DayAndTitle("Day 7: Camel Cards", new Day07()),
                 new DayAndTitle("Day 8: Haunted Wasteland", new Day08()),
-                new DayAndTitle("Day 9: Haunted Wasteland", new Day09()));
+                new DayAndTitle("Day 9: Haunted Wasteland", new Day09()),
+                new DayAndTitle("Day 11: Cosmic Expansion", new Day11()));
     }
 }
