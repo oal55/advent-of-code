@@ -37,7 +37,6 @@ public class Day10 implements Day {
         Grid grid = new Grid(Input.readLines(this.getClass().getSimpleName()).stream()
                 .map(String::toCharArray)
                 .toArray(char[][]::new));
-
         return new Solutions(String.valueOf(part1(grid)), String.valueOf(part2(grid)));
     }
 
