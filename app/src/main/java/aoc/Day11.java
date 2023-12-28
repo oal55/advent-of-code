@@ -1,6 +1,7 @@
 package aoc;
 
 import aoc.commons.Input;
+import aoc.commons.Point;
 import aoc.commons.Solutions;
 import java.util.List;
 import one.util.streamex.IntStreamEx;
@@ -49,13 +50,11 @@ public class Day11 implements Day {
         return transposed;
     }
 
-    private static List<Coordinate> getGalaxyCoordinates(char[][] matrix) {
+    private static List<Point> getGalaxyCoordinates(char[][] matrix) {
         int I = matrix.length, J = matrix[0].length;
         return IntStreamEx.range(I)
                 .flatMapToObj(i ->
-                        IntStreamEx.range(J).filter(j -> matrix[i][j] == '#').mapToObj(j -> new Coordinate(i, j)))
+                        IntStreamEx.range(J).filter(j -> matrix[i][j] == '#').mapToObj(j -> Point.of(i, j)))
                 .toList();
     }
-
-    record Coordinate(int i, int j) {}
 }
