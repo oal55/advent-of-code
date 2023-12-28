@@ -7,6 +7,7 @@ import aoc.commons.Point;
 import aoc.commons.Solutions;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import one.util.streamex.StreamEx;
 
@@ -45,14 +46,11 @@ public class Day10 implements Day {
                 .filter(grid::valid)
                 .filter(p -> StreamEx.of(connections(grid.get(p))).map(p::add).has(startPos))
                 .toList();
-
-        for (Point point : potentialLoopStarts) {
-            List<Point> loop = tryGetLoopThatContainsStart(grid, startPos, point);
-            if (!loop.isEmpty()) {
-                return loop;
-            }
-        }
-        throw new IllegalStateException("No loop found?!");
+        return potentialLoopStarts.stream()
+                .map(p -> tryGetLoopThatContainsStart(grid, startPos, p))
+                .filter(l -> !l.isEmpty())
+                .findFirst()
+                .orElseThrow(() -> new IllegalStateException("No loop found?!"));
     }
 
     private static List<Point> tryGetLoopThatContainsStart(Grid grid, Point start, Point cur) {
@@ -62,6 +60,7 @@ public class Day10 implements Day {
         Point prevPoint = start;
         while (!cur.equals(start)) {
             Optional<Point> maybeNext = getNextPoint(grid, cur, prevPoint);
+            // if this is empty, it means we've reached a dead end.
             if (maybeNext.isEmpty()) {
                 return List.of();
             }
@@ -81,13 +80,10 @@ public class Day10 implements Day {
     }
 
     private static Point findStart(Grid grid) {
-        for (int i = 0; i < grid.I; ++i) {
-            for (int j = 0; j < grid.J; ++j) {
-                if (grid.matrix[i][j] == 'S') {
-                    return Point.of(i, j);
-                }
-            }
-        }
-        throw new IllegalArgumentException("No start found");
+        return grid.entries()
+                .filterValues(cell -> cell == 'S')
+                .findFirst()
+                .map(Map.Entry::getKey)
+                .orElseThrow(() -> new IllegalStateException("No start found?"));
     }
 }
