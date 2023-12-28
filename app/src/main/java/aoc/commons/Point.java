@@ -8,7 +8,11 @@ public record Point(int i, int j) {
     }
 
     public Point add(Point dir) {
-        return new Point(i + dir.i, j + dir.j);
+        return Point.of(i + dir.i, j + dir.j);
+    }
+
+    public Point reverse() {
+        return Point.of(-i, -j);
     }
 
     public List<Point> fourNeighbors() {
