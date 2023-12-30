@@ -21,4 +21,15 @@ public class Utils {
     private static Stream<Long> streamLongsFromStr(String text) {
         return INT_PATTERN.matcher(text).results().map(MatchResult::group).map(Long::parseLong);
     }
+
+    public static char[][] transposed(char[][] matrix) {
+        int I = matrix.length, J = matrix[0].length;
+        char[][] transposed = new char[J][I];
+        for (int i = 0; i < I; ++i) {
+            for (int j = 0; j < J; ++j) {
+                transposed[j][i] = matrix[i][j];
+            }
+        }
+        return transposed;
+    }
 }

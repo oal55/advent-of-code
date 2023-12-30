@@ -3,6 +3,7 @@ package aoc;
 import aoc.commons.Input;
 import aoc.commons.Point;
 import aoc.commons.Solutions;
+import aoc.commons.Utils;
 import java.util.List;
 import one.util.streamex.IntStreamEx;
 import one.util.streamex.StreamEx;
@@ -21,7 +22,7 @@ public class Day11 implements Day {
 
     private static long calculateSumOfDistances(char[][] matrix, long expansionFactor) {
         List<Long> rowDists = cumulativeColumnDistances(matrix, expansionFactor);
-        List<Long> colDists = cumulativeColumnDistances(transpose(matrix), expansionFactor);
+        List<Long> colDists = cumulativeColumnDistances(Utils.transposed(matrix), expansionFactor);
         return StreamEx.ofPairs(
                         getGalaxyCoordinates(matrix),
                         (p, q) -> getLinearDistance(p.j(), q.j(), colDists) + getLinearDistance(p.i(), q.i(), rowDists))
@@ -37,17 +38,6 @@ public class Day11 implements Day {
 
     private static long getLinearDistance(int coordinate1, int coordinate2, List<Long> cumulativeDists) {
         return Math.abs(cumulativeDists.get(coordinate1) - cumulativeDists.get(coordinate2));
-    }
-
-    private static char[][] transpose(char[][] matrix) {
-        int I = matrix.length, J = matrix[0].length;
-        char[][] transposed = new char[J][I];
-        for (int i = 0; i < I; ++i) {
-            for (int j = 0; j < J; ++j) {
-                transposed[j][i] = matrix[i][j];
-            }
-        }
-        return transposed;
     }
 
     private static List<Point> getGalaxyCoordinates(char[][] matrix) {
