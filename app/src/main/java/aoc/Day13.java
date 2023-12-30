@@ -8,7 +8,6 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import one.util.streamex.EntryStream;
 
 public class Day13 implements Day {
 
@@ -35,18 +34,10 @@ public class Day13 implements Day {
     }
 
     static int summarizeReflections(char[][] matrix, ReflectionStatus desiredStatus) {
-        int aroundHorizontalLine = EntryStream.of(summarize(matrix))
-                .filterKeys(desiredStatus::equals)
-                .mapToInt(Map.Entry::getValue)
-                .sum();
-        int aroundVerticalLine = EntryStream.of(summarize(Utils.transposed(matrix)))
-                .filterKeys(desiredStatus::equals)
-                .mapToInt(Map.Entry::getValue)
-                .sum();
-        return 100 * aroundHorizontalLine + aroundVerticalLine;
+        return 100 * summarize(matrix, desiredStatus) + summarize(Utils.transposed(matrix), desiredStatus);
     }
 
-    static Map<ReflectionStatus, Integer> summarize(char[][] matrix) {
+    static int summarize(char[][] matrix, ReflectionStatus desiredStatus) {
         List<String> lines = Arrays.stream(matrix).map(String::copyValueOf).toList();
         Map<ReflectionStatus, Integer> reflections = new HashMap<>();
         for (int i = 1; i < lines.size(); ++i) {
@@ -55,7 +46,7 @@ public class Day13 implements Day {
                 reflections.put(status, reflections.getOrDefault(status, 0) + i);
             }
         }
-        return reflections;
+        return reflections.getOrDefault(desiredStatus, 0);
     }
 
     static ReflectionStatus getReflectionStatus(List<String> s, int lo, int hi) {
