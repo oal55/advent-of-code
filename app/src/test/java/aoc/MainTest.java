@@ -85,9 +85,23 @@ class MainTest {
     }
 
     @Test
+    void testDay12() {
+        Solutions solutions = new Day12().solve();
+        assertThat(solutions.part1()).isEqualTo("7506");
+        assertThat(solutions.part2()).isEqualTo("fml");
+    }
+
+    @Test
     void testDay13() {
         Solutions solutions = new Day13().solve();
         assertThat(solutions.part1()).isEqualTo("35521");
         assertThat(solutions.part2()).isEqualTo("34795");
+    }
+
+    @Test
+    void testDay14() {
+        Solutions solutions = new Day14().solve();
+        assertThat(solutions.part1()).isEqualTo("109385");
+        assertThat(solutions.part2()).isEqualTo("fml");
     }
 }
