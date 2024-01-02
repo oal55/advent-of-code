@@ -14,6 +14,10 @@ public class Utils {
         return streamLongsFromStr(text).toList();
     }
 
+    public static List<Integer> readIntsFromStr(String text) {
+        return streamLongsFromStr(text).map(Math::toIntExact).toList();
+    }
+
     public static Set<Long> readUniqueLongsFromStr(String text) {
         return streamLongsFromStr(text).collect(Collectors.toSet());
     }
