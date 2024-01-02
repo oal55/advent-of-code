@@ -88,7 +88,7 @@ class MainTest {
     void testDay12() {
         Solutions solutions = new Day12().solve();
         assertThat(solutions.part1()).isEqualTo("7506");
-        assertThat(solutions.part2()).isEqualTo("fml");
+        assertThat(solutions.part2()).isEqualTo("548241300348335");
     }
 
     @Test
